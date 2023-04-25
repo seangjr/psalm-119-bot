@@ -35,6 +35,20 @@ bot.command("start", (ctx) => {
     scheduleJob(ctx);
 });
 
+bot.command("debug", (ctx) => {
+    ctx.reply(
+        `Today is ${date}\n\n${moment().diff(
+            moment("2023-03-29"),
+            "days",
+        )} days since start\n${moment("2023-09-20").diff(
+            moment(),
+            "days",
+        )} days until end\n\n${
+            moment().diff(moment("2023-03-29"), "days") + 1
+        } verse number\n\n${JSON.stringify(bot.telegram.getChat())}`,
+    );
+});
+
 bot.command("verse", (ctx) => {
     const now = moment();
     const tenAM = moment().hour(10).minute(0).second(0);
