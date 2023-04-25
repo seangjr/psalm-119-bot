@@ -102,6 +102,14 @@ function scheduleJob(ctx) {
     const tenAM = moment().hour(10).minute(0).second(0);
     const delay = tenAM.diff(now, "milliseconds");
 
+    if (now.isSameOrAfter(tenAM)) {
+        bot.telegram.sendMessage(
+            ctx.chat.id,
+            `Today is <b>${date}</b>\n\n<i>Verse for today will be sent at 10AM</i>`,
+            { parse_mode: "HTML" },
+        );
+    }
+
     setTimeout(() => {
         sendVerseForToday(ctx);
         setInterval(() => {
