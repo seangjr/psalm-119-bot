@@ -73,6 +73,12 @@ async function sendVerseForToday(ctx) {
                 { parse_mode: "HTML" },
             );
         });
+    } else if (now.isBefore(tenAM)) {
+        bot.telegram.sendMessage(
+            ctx.chat.id,
+            `Today is <b>${date}</b>\n\n<b>Psalm 119:${verseNumber}</b>\n<i>Verse will be sent at 10AM.</i>`,
+            { parse_mode: "HTML" },
+        );
     }
 
     if (daysUntil === 0) {
