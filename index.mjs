@@ -13,6 +13,15 @@ This bot will cover 1 verse per day of the Psalm 119 challenge, which is to read
 
 It will start from March 29, 2023 and end on September 20, 2023.
 */
+
+// formatted date
+const date = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+});
+
 bot.command("help", (ctx) => {
     ctx.replyWithHTML(
         `<b>To start, here's the list of the commands:</b>\n/start - Start the bot\n/verse - Get the verse for today`,
@@ -24,22 +33,6 @@ bot.command("start", (ctx) => {
         `This bot will cover 1 verse per day of the Psalm 119 challenge, which is to read 1 verse of Psalm 119 per day for 176 days.\n\nIt will start from <b><u>March 29, 2023</u></b> and end on <b><u>September 20, 2023.</u></b>\n\n<i>Source code: <a>https://github.com/seangjr/psalm-119-bot</a></i>\n\n<b>To start, here's the list of the commands:</b>\n/start - Start the bot\n/verse - Get the verse for today`,
     );
     scheduleJob(ctx);
-});
-
-bot.command("debug", (ctx) => {
-    ctx.reply(
-        `Today is ${moment().format(
-            "ddd, Do MMM, YYYY kk:mm",
-        )}\n\n${moment().diff(
-            moment("2023-03-29"),
-            "days",
-        )} days since start\n${moment("2023-09-20").diff(
-            moment(),
-            "days",
-        )} days until end\n\n${
-            moment().diff(moment("2023-03-29"), "days") + 1
-        } verse number`,
-    );
 });
 
 bot.command("verse", (ctx) => {
