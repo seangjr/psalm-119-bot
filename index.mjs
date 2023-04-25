@@ -25,11 +25,10 @@ const date = new Date().toLocaleDateString("en-US", {
 
 bot.start((ctx) => {
     ctx.replyWithHTML(
-        `<b>Psalm 119 Buddy</b>\n\nThis bot will cover 1 verse per day of the Psalm 119 challenge, which is to read 1 verse of Psalm 119 per day for 176 days.\n\nIt will start from <b><u>March 29, 2023</u></b> and end on <b><u>September 20, 2023.</u></b>\n\n<i>Source code: <a>https://github.com/seangjr/psalm-119-bot</a></i>`,
+        `This bot will cover 1 verse per day of the Psalm 119 challenge, which is to read 1 verse of Psalm 119 per day for 176 days.\n\nIt will start from <b><u>March 29, 2023</u></b> and end on <b><u>September 20, 2023.</u></b>\n\n<i>Source code: <a>https://github.com/seangjr/psalm-119-bot</a></i>`,
     );
+    verseToSend();
 });
-
-verseToSend();
 
 // send a message every 24 hours
 setInterval(() => {
@@ -45,11 +44,18 @@ function verseToSend() {
     bible.getVerse(`${book} ${chapter}:${verse}`, (err, data) => {
         if (err) throw err;
         const c = data[0];
-        bot.telegram.sendMessage(
-            process.env.CHAT_ID,
-            `Today is ${date}. Let's read together!\n\n<b>${c.bookname} ${c.chapter}:${c.verse}</b>\n${c.text}\n\n<i>Do share what you've taken away from reading this word too!</i>`,
-            { parse_mode: "HTML" },
-        );
+        bot.telegram.getUpdates().then((updates) => {
+            updates.forEach((update) => {
+                const chat = update.message.chat;
+                if (chat === "group" || chat === "supergroup") {
+                    bot.telegram.sendMessage(
+                        chat.id,
+                        `Today is ${date}. Let's read together!\n\n<b>${c.bookname} ${c.chapter}:${c.verse}</b>\n${c.text}\n\n<i>Do share what you've taken away from reading this word too!</i>`,
+                        { parse_mode: "HTML" },
+                    );
+                }
+            });
+        });
     });
     verse++;
 }
