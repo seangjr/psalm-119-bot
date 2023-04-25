@@ -43,7 +43,7 @@ bot.command("/esv", async (ctx) => {
 
     if (now.isSameOrAfter(tenAM)) {
         esv.getVerse(`Psalm 119:${verseNumber}`, (err, data) => {
-            if (err) throw err;
+            if (err) ctx.reply(err.toString());
             const c = data.passages[0];
             ctx.replyWithHTML(
                 `Today is <b>${date}</b>\n\n<b>Psalm 119:${verseNumber}</b>\n<i>${c.text}</i>`,
