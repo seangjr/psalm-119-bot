@@ -36,7 +36,13 @@ bot.command("start", (ctx) => {
 });
 
 bot.command("verse", (ctx) => {
-    sendVerseForToday(ctx);
+    const now = moment();
+    const tenAM = moment().hour(10).minute(0).second(0);
+    if (now.isSameOrAfter(tenAM)) {
+        scheduleJob(ctx);
+    } else {
+        sendVerseForToday(ctx);
+    }
 });
 
 bot.command("/esv", async (ctx) => {
