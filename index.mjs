@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import moment from "moment";
+import moment from "moment-timezone";
 import { Telegraf } from "telegraf";
 import bible from "bible-english";
 import ESVAPI from "./esv.js";
@@ -14,9 +14,10 @@ This bot will cover 1 verse per day of the Psalm 119 challenge, which is to read
 It will start from March 29, 2023 and end on September 20, 2023.
 */
 
-// formatted date
-const date = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
+// formatted date gmt +8
+moment.tz.setDefault("Asia/Manila");
+const date = new Date().toLocaleString("en-US", {
+    timeZone: "Asia/Manila",
     year: "numeric",
     month: "long",
     day: "numeric",

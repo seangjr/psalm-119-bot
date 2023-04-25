@@ -7,7 +7,7 @@
     "bible-english": "^1.0.3",
     "bible.js": "^4.0.2",
     "dotenv": "^16.0.3",
-    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "telegraf": "^4.12.2"
   }
 }
