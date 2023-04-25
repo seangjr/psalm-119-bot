@@ -2,9 +2,11 @@ import dotenv from "dotenv";
 import moment from "moment";
 import { Telegraf } from "telegraf";
 import bible from "bible-english";
+import ESVAPI from "./esv";
 
 dotenv.config();
 const bot = new Telegraf(process.env.BOT_TOKEN);
+const esv = new ESVAPI(process.env.ESV_API_KEY);
 
 /*
 This bot will cover 1 verse per day of the Psalm 119 challenge, which is to read 1 verse of Psalm 119 per day for 176 days.
@@ -35,7 +37,6 @@ bot.command("start", (ctx) => {
 
 bot.command("/verse", async (ctx) => {
     // WIP lmao
-    await sendVerseForToday(ctx);
 });
 
 async function sendVerseForToday(ctx) {
