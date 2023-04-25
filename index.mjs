@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import moment from "moment";
 import { Telegraf } from "telegraf";
 import bible from "bible-english";
-import ESVAPI from "./esv";
+import ESVAPI from "./esv.js";
 
 dotenv.config();
 const bot = new Telegraf(process.env.BOT_TOKEN);
