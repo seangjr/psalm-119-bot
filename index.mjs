@@ -36,7 +36,7 @@ bot.command("start", (ctx) => {
 });
 
 bot.command("verse", (ctx) => {
-    scheduleJob(ctx);
+    sendVerseForToday(ctx);
 });
 
 bot.command("/esv", async (ctx) => {
@@ -73,10 +73,10 @@ async function sendVerseForToday(ctx) {
                 { parse_mode: "HTML" },
             );
         });
-    } else if (now.isBefore(tenAM)) {
+    } else {
         bot.telegram.sendMessage(
             ctx.chat.id,
-            `Today is <b>${date}</b>\n\n<b>Psalm 119:${verseNumber}</b>\n<i>Verse will be sent at 10AM.</i>`,
+            `Today is <b>${date}</b>\n\n<b>Psalm 119:${verseNumber}</b>\n<i>Verse for today will be sent at 10AM</i>`,
             { parse_mode: "HTML" },
         );
     }
