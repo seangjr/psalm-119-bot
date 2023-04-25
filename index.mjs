@@ -13,15 +13,6 @@ This bot will cover 1 verse per day of the Psalm 119 challenge, which is to read
 
 It will start from March 29, 2023 and end on September 20, 2023.
 */
-
-// formatted date
-const date = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-});
-
 bot.command("help", (ctx) => {
     ctx.replyWithHTML(
         `<b>To start, here's the list of the commands:</b>\n/start - Start the bot\n/verse - Get the verse for today`,
@@ -37,7 +28,9 @@ bot.command("start", (ctx) => {
 
 bot.command("debug", (ctx) => {
     ctx.reply(
-        `Today is ${date}\n\n${moment().diff(
+        `Today is ${moment().format(
+            "ddd, Do MMM, YYYY kk:mm",
+        )}\n\n${moment().diff(
             moment("2023-03-29"),
             "days",
         )} days since start\n${moment("2023-09-20").diff(
@@ -45,7 +38,7 @@ bot.command("debug", (ctx) => {
             "days",
         )} days until end\n\n${
             moment().diff(moment("2023-03-29"), "days") + 1
-        } verse number\n\n${JSON.stringify(bot.telegram.getChat())}`,
+        } verse number`,
     );
 });
 
