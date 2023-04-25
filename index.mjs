@@ -31,7 +31,7 @@ bot.command("help", (ctx) => {
 
 bot.command("start", (ctx) => {
     ctx.replyWithHTML(
-        `This bot will cover 1 verse per day of the Psalm 119 challenge, which is to read 1 verse of Psalm 119 per day for 176 days.\n\nIt will start from <b><u>March 29, 2023</u></b> and end on <b><u>September 20, 2023.</u></b>\n\n<i>Source code: <a>https://github.com/seangjr/psalm-119-bot</a></i>\n\n<b>To start, here's the list of the commands:</b>\n/start - Start the bot\n/verse - Get the verse for today`,
+        `This bot will cover 1 verse per day of the Psalm 119 challenge, which is to read 1 verse of Psalm 119 per day for 176 days.\n\nIt will start from <b><u>March 29, 2023</u></b> and end on <b><u>September 20, 2023.</u></b>The verse will be sent at <b>10AM</b> daily.\n\n<i>Source code: <a>https://github.com/seangjr/psalm-119-bot</a></i>\n\n<b>To start, here's the list of the commands:</b>\n/start - Start the bot\n/verse - Get the verse for today`,
     );
     scheduleJob(ctx);
 });
