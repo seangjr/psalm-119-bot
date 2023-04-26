@@ -1,64 +1,22 @@
-const https = require("https");
-
-const API_BASE_URL = "https://api.esv.org/v3";
+const fetch = require("node-fetch");
 
 class ESVAPI {
     constructor(apiKey) {
+        this.baseUrl = "https://api.esv.org/v3/passage/text/";
         this.apiKey = apiKey;
     }
 
-    request(endpoint, options = {}) {
-        const queryStr = Object.entries(options)
-            .map(
-                ([key, value]) =>
-                    `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
-            )
-            .join("&");
-        const url = `${API_BASE_URL}/${endpoint}?${queryStr}`;
-
-        return new Promise((resolve, reject) => {
-            const req = http.request(
-                url,
-                {
-                    headers: {
-                        Authorization: `Token ${this.apiKey}`,
-                    },
-                },
-                (res) => {
-                    // reject on bad status
-                    let body = "";
-                    res.setEncoding("utf8");
-                    res.on("data", (chunk) => (body += chunk)); // we need to get the whole response, so we append to the body
-                    res.on("end", () => {
-                        const result = JSON.parse(body);
-                        if (res.statusCode === 200) {
-                            resolve(result);
-                        } else {
-                            reject(
-                                new Error(
-                                    `Request failed: ${res.statusCode} ${res.statusMessage}`,
-                                ),
-                            );
-                        }
-                    });
-                },
-            );
-
-            req.on("error", (err) => reject(err));
-
-            req.end();
+    async getPassage(query) {
+        const url = new URL(this.baseUrl);
+        url.searchParams.set("q", query);
+        url.searchParams.set("include-footnotes", false);
+        const response = await fetch(url, {
+            headers: {
+                Authorization: `Token ${this.apiKey}`,
+            },
         });
-    }
-
-    getPassage(passage, options = {}) {
-        return this.request("passage/text", {
-            ...options,
-            q: passage,
-        });
-    }
-
-    getVerse(verse, options = {}) {
-        return this.getPassage(`${verse}`, options);
+        const json = await response.json();
+        return json;
     }
 }
 

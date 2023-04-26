@@ -5,7 +5,7 @@ import bible from "bible-english";
 import ESVAPI from "./esv.js";
 
 dotenv.config();
-const bot = new Telegraf(process.env.BOT_TOKEN);
+const bot = new Telegraf(process.env.BOT_TOKEN_DEV);
 const esv = new ESVAPI(process.env.ESV_API_KEY);
 
 /*
@@ -46,12 +46,6 @@ bot.command("verse", (ctx) => {
     scheduleJob(ctx);
 });
 
-bot.command("esv", async (ctx) => {
-    await ctx.reply(
-        "I'm still working on this command. Please wait for a few days.",
-    );
-});
-
 async function sendVerseForToday(ctx) {
     const now = moment();
     const tenAM = moment().hour(10).minute(0).second(0);
@@ -60,12 +54,14 @@ async function sendVerseForToday(ctx) {
     const verseNumber = daysSinceStart + 1;
 
     if (now.isSameOrAfter(tenAM)) {
-        await bible.getVerse(`Psalm 119:${verseNumber}`, (err, data) => {
-            if (err) throw err;
-            const c = data[0];
-            bot.telegram.sendMessage(
-                ctx.chat.id,
-                `Today is <b>${date}</b>\n\n<b>Psalm 119:${verseNumber}</b>\n<i>${c.text}</i>`,
+        await esv.getPassage(`Psalm 119:${verseNumber}`).then((data) => {
+            const text = data.passages[0];
+            const elements = text.split("\n");
+            const verse = elements[0];
+            // the verse text is the elements after the first element joined
+            const verseText = elements.slice(1).join("\n");
+            ctx.replyWithHTML(
+                `Today is <b><u>${date}</u></b>\n\n<b>${verse}</b>\n${verseText}\n\n<i>Source: <a>https://www.esv.org/Psalm 119:${verseNumber}</a></i>`,
                 { parse_mode: "HTML" },
             );
         });
