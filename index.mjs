@@ -47,7 +47,9 @@ bot.command("verse", (ctx) => {
 });
 
 bot.command("esv", async (ctx) => {
-    ctx.reply("I'm still working on this command. Please wait for a few days.");
+    await ctx.reply(
+        "I'm still working on this command. Please wait for a few days.",
+    );
 });
 
 async function sendVerseForToday(ctx) {
