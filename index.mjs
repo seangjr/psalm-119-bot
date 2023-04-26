@@ -36,31 +36,18 @@ bot.command("start", (ctx) => {
     scheduleJob(ctx);
 });
 
+bot.command("news", (ctx) => {
+    ctx.replyWithHTML(
+        `<b>What's new</b>\n\n- Fixed some issues regarding the verse not being sent at 10AM\n- Added a new command: /news - Get the latest news about the bot\n- Added a new command: /esv - Get the verse for today from ESV (WIP)`,
+    );
+});
+
 bot.command("verse", (ctx) => {
-    const now = moment();
-    const tenAM = moment().hour(10).minute(0).second(0);
-    if (now.isSameOrAfter(tenAM)) {
-        scheduleJob(ctx);
-    } else {
-        sendVerseForToday(ctx);
-    }
+    scheduleJob(ctx);
 });
 
 bot.command("/esv", async (ctx) => {
-    const now = moment();
-    const tenAM = moment().hour(10).minute(0).second(0);
-    const daysSinceStart = now.diff(moment("2023-03-29"), "days");
-    const verseNumber = daysSinceStart + 1;
-
-    if (now.isSameOrAfter(tenAM)) {
-        esv.getVerse(`Psalm 119:${verseNumber}`, (err, data) => {
-            if (err) ctx.reply(err.toString());
-            const c = data.passages[0];
-            ctx.replyWithHTML(
-                `Today is <b>${date}</b>\n\n<b>Psalm 119:${verseNumber}</b>\n<i>${c.text}</i>`,
-            );
-        });
-    }
+    ctx.reply("I'm still working on this command. Please wait for a few days.");
 });
 
 async function sendVerseForToday(ctx) {
@@ -101,14 +88,6 @@ function scheduleJob(ctx) {
     const now = moment();
     const tenAM = moment().hour(10).minute(0).second(0);
     const delay = tenAM.diff(now, "milliseconds");
-
-    if (now.isSameOrAfter(tenAM)) {
-        bot.telegram.sendMessage(
-            ctx.chat.id,
-            `Today is <b>${date}</b>\n\n<i>Verse for today will be sent at 10AM</i>`,
-            { parse_mode: "HTML" },
-        );
-    }
 
     setTimeout(() => {
         sendVerseForToday(ctx);
