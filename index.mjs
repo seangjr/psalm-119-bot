@@ -46,7 +46,7 @@ bot.command("verse", (ctx) => {
     scheduleJob(ctx);
 });
 
-bot.command("/esv", async (ctx) => {
+bot.command("esv", async (ctx) => {
     ctx.reply("I'm still working on this command. Please wait for a few days.");
 });
 
