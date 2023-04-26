@@ -38,7 +38,7 @@ bot.command("start", (ctx) => {
 
 bot.command("news", (ctx) => {
     ctx.replyWithHTML(
-        `<b>What's new</b>\n\n- Fixed some issues regarding the verse not being sent at 10AM\n- Added a new command: /news - Get the latest news about the bot\n- Added a new command: /esv - Get the verse for today from ESV (WIP)`,
+        `<b>What's new</b>\n\n- Fixed some issues regarding the verse not being sent at 10AM\n- Added a new command: /news - Get the latest news about the bot\n- Changed the translation from NET to ESV`,
     );
 });
 
