@@ -5,7 +5,7 @@ import bible from "bible-english";
 import ESVAPI from "./esv.js";
 
 dotenv.config();
-const bot = new Telegraf(process.env.BOT_TOKEN_DEV);
+const bot = new Telegraf(process.env.BOT_TOKEN);
 const esv = new ESVAPI(process.env.ESV_API_KEY);
 
 /*
