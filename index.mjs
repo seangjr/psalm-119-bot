@@ -15,7 +15,7 @@ It will start from March 29, 2023 and end on September 20, 2023.
 
 // formatted date gmt +8
 moment.tz.setDefault("Asia/Manila");
-let date = "";
+let date = moment().format("MMMM DD, YYYY @ h:mm A");
 
 // Update the date every second
 setInterval(() => {
