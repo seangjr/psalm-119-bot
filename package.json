@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "main": "index.mjs",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --experimental-modules index.mjs"
+  },
   "dependencies": {
     "bible-english": "^1.0.3",
     "bible.js": "^4.0.2",
     "dotenv": "^16.0.3",
     "moment-timezone": "^0.5.43",
+    "nodemon": "^2.0.22",
     "telegraf": "^4.12.2"
   }
 }
