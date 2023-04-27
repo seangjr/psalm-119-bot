@@ -118,11 +118,16 @@ async function sendVerseForToday(ctx) {
         );
     }
 }
-
 function scheduleJob(ctx) {
     const now = moment();
-    const tenAM = moment().hour(10).minute(0).second(0);
-    const delay = tenAM.diff(now, "milliseconds");
+    const today10AM = moment().hour(10).minute(0).second(0);
+
+    // If the current time is already past 10AM, schedule the job for tomorrow
+    if (now.isAfter(today10AM)) {
+        today10AM.add(1, "day");
+    }
+
+    const delay = today10AM.diff(now, "milliseconds");
 
     setTimeout(() => {
         sendVerseForToday(ctx);
@@ -131,6 +136,5 @@ function scheduleJob(ctx) {
         }, 24 * 60 * 60 * 1000);
     }, delay);
 }
-
 bot.launch(console.log("Bot started!"));
 bot.telegram.sendMessage("-1001965728464", news, { parse_mode: "HTML" });
