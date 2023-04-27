@@ -15,9 +15,14 @@ It will start from March 29, 2023 and end on September 20, 2023.
 
 // formatted date gmt +8
 moment.tz.setDefault("Asia/Manila");
-const date = moment().format("MMMM DD, YYYY @ h:mm A");
+let date = "";
 
-const news = `<b>What's new on ${date}</b>❗\n\n- Fixed scheduling issues, now added a new command to schedule it instead of start\n- Added a /report command to report bugs or issues\n- Added a /daysleft command`;
+// Update the date every second
+setInterval(() => {
+    date = moment().format("MMMM DD, YYYY @ h:mm A");
+}, 1000);
+
+const news = `<b>What's new on ${date}</b>❗\n\n- Fixed scheduling issues, now added a new command to schedule it instead of start\n- Added a /report command to report bugs or issues\n- Added a /daysleft command\n- FIXED THE TIME NOT CHANGING 😠`;
 
 bot.command("help", (ctx) => {
     ctx.replyWithHTML(
