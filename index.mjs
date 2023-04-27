@@ -133,4 +133,4 @@ function scheduleJob(ctx) {
 }
 
 bot.launch(console.log("Bot started!"));
-bot.telegram.sendMessage("-901315742", news, { parse_mode: "HTML" });
+bot.telegram.sendMessage("-1001965728464", news, { parse_mode: "HTML" });
