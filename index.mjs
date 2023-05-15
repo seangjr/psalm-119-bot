@@ -22,7 +22,7 @@ setInterval(() => {
     date = moment().format("MMMM DD, YYYY @ h:mm A");
 }, 1000);
 
-const news = `<b>What's new on ${date}</b>❗\n\n- Fixed scheduling issues, now added a new command to schedule it instead of start\n- Added a /report command to report bugs or issues\n- Added a /daysleft command\n- FIXED THE TIME NOT CHANGING 😠`;
+const news = `<b>What's new on ${date}</b>❗\n\n- paid my bills so i dont have to suffer from outages anymore\n- /donate, /paynow if u wanna support my works`;
 
 bot.command("help", (ctx) => {
     ctx.replyWithHTML(
@@ -80,6 +80,23 @@ bot.command("report", async (ctx) => {
 bot.command("group", (ctx) => {
     ctx.reply(
         "🌏 Join the announcement group for this bot to receive updates: https://t.me/+98vqICnSRQE0MDU1",
+    );
+});
+
+bot.command("donate", (ctx) => {
+    ctx.reply(
+        "🙏 Thank you for your support! You can donate here: https://www.buymeacoffee.com/seangjr",
+    );
+});
+
+bot.command("paynow", (ctx) => {
+    // reply with the paynow qr code
+    ctx.replyWithPhoto(
+        { source: "/public/paynow_qr.jpg" },
+        {
+            caption:
+                "💸 You can also scan this PayNow QR to fund my future work!",
+        },
     );
 });
 
