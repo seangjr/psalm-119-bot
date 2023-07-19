@@ -4,7 +4,7 @@ import { Telegraf } from "telegraf";
 import ESVAPI from "./esv.js";
 
 dotenv.config();
-const bot = new Telegraf(process.env.BOT_TOKEN);
+const bot = new Telegraf(process.env.BOT_TOKEN_DEV);
 const esv = new ESVAPI(process.env.ESV_API_KEY);
 
 /*
@@ -22,7 +22,60 @@ setInterval(() => {
     date = moment().format("MMMM DD, YYYY @ h:mm A");
 }, 1000);
 
-const news = `<b>What's new on ${date}</b>❗\n\n- paid my bills so i dont have to suffer from outages anymore\n- /donate, /paynow if u wanna support my works`;
+let reflection = [];
+class Reflection {
+    // everytime someone writes a reflection, it will be stored in a variable that resets every 24 hours. i want the instance to be shared across all users, so i made it a class
+
+    constructor() {
+        this.reflection = reflection;
+    }
+
+    addReflection = (text, ctx) => {
+        // if the user has already written a reflection, it will replace the user's previous reflection
+        if (reflection.some((ref) => ref.name === ctx.from.username)) {
+            reflection = reflection.filter(
+                (ref) => ref.name !== ctx.from.username,
+            );
+            // send a message that the user has updated their reflection
+            ctx.replyWithHTML(
+                `📖 Updated your reflection for today's verse to: <span class="tg-spoiler"><b>${text}</b></span>`,
+            );
+        } else {
+            ctx.replyWithHTML(
+                `📖 Added your reflection for today's verse: <span class="tg-spoiler"><b>${text}</b></span>`,
+            );
+        }
+        reflection.push({
+            name: ctx.from.username,
+            text,
+        });
+    };
+
+    getReflection() {
+        // get the reflection for the day
+        let reflectionStr = "";
+        reflection.forEach((ref) => {
+            reflectionStr += `<b>@${ref.name}</b>: ${ref.text}\n\n`;
+        });
+        return reflectionStr;
+    }
+
+    resetReflection(ctx) {
+        reflection = [];
+        ctx.replyWithHTML(`📖 <b>Reflections have been reset.</b>`);
+    }
+
+    async sendReflection(ctx) {
+        const getReflectionStr = this.getReflection();
+        if (getReflectionStr) {
+            await ctx.replyWithHTML(
+                `📖 <b>Reflection(s) for yesterday's verse</b>\n${getReflectionStr}`,
+            );
+        }
+    }
+}
+
+const news = `<b>What's new on ${date}</b>❗\n\n- added A NEW feature: reflections. write a reflection for today's verse for it to be sent on the next day. hoping to see that this bot wont just help with convenience and keeping up with the challenge but also something that stimulates growth and intentionality. let's see what you guys have to say!`;
 
 bot.command("help", (ctx) => {
     ctx.replyWithHTML(
@@ -100,6 +153,22 @@ bot.command("paynow", (ctx) => {
     );
 });
 
+bot.command("reflection", async (ctx) => {
+    const reflectionText = ctx.message.text.split(" ").slice(1).join(" ");
+    if (!reflectionText) {
+        await ctx.reply("Please enter a reflection! 😠");
+        return;
+    }
+
+    const reflection = new Reflection();
+    reflection.addReflection(reflectionText, ctx);
+});
+
+bot.command("getreflections", async (ctx) => {
+    const reflection = new Reflection();
+    reflection.sendReflection(ctx);
+});
+
 async function sendVerseForToday(ctx) {
     const now = moment();
     const tenAM = moment().hour(10).minute(0).second(0);
@@ -148,10 +217,34 @@ function scheduleJob(ctx) {
 
     setTimeout(() => {
         sendVerseForToday(ctx);
+        // reflection
+        const reflection = new Reflection();
+        new Promise((resolve, reject) => {
+            reflection.sendReflection(ctx);
+            resolve();
+        })
+            .then(() => {
+                reflection.resetReflection(ctx);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         setInterval(() => {
             sendVerseForToday(ctx);
+            // reflection
+            const reflection = new Reflection();
+            new Promise((resolve, reject) => {
+                reflection.sendReflection(ctx);
+                resolve();
+            })
+                .then(() => {
+                    reflection.resetReflection(ctx);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }, 24 * 60 * 60 * 1000);
     }, delay);
 }
 bot.launch(console.log("Bot started!"));
-bot.telegram.sendMessage("-1001965728464", news, { parse_mode: "HTML" });
+// bot.telegram.sendMessage("-1001965728464", news, { parse_mode: "HTML" });
